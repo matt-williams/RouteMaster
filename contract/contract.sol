@@ -86,7 +86,7 @@ contract RouteMaster
         }
     }
 
-    function changeOwner()
+    function changeOwner() returns (bool)
     {
         uint votes = 0;
         for(uint i=0; i < beacons.length; i++)
@@ -99,7 +99,9 @@ contract RouteMaster
         if(votes == rule)
         {
             owner = msg.sender;
+            return true;
         }
+        return false;
     }
 
     function getNumberOfBeacons() constant returns (uint)
@@ -133,6 +135,11 @@ contract RouteMaster
         Beacon beacon = beacons[_index];
         CheckIn checkIn = beacon.check_in;
         return (checkIn.phone_address, checkIn.timestamp);
+    }
+
+    function getOwner() constant returns (address)
+    {
+        return owner;    
     }
     
 }
