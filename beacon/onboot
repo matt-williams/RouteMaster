@@ -1,0 +1,4 @@
+#!/bin/bash
+hciconfig hci0 up
+hciconfig hci0 leadv
+hciconfig hci0 name RouteMaster
