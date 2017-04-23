@@ -74,23 +74,15 @@ contract RouteMaster
         return beacons.length;
     }
 
-    function checkIn(address _beacon_address) returns (string)
+    function checkIn(address _phone_address) returns (string)
     {
-        if(msg.sender == owner)
+        for(uint i=0; i < beacons.length; i++)
         {
-            for(uint i=0; i < beacons.length; i++)
+            if(beacons[i].beacon_address == msg.sender)
             {
-                if(beacons[i].beacon_address == _beacon_address)
-                {
-                    beacons[i].check_in = CheckIn({phone_address: msg.sender, timestamp: block.timestamp});
-                    return "Check in successful";
-                }
+                beacons[i].check_in = CheckIn({phone_address: _phone_address, timestamp: block.timestamp});
+                return "Check in successful";
             }
-        }
-        else
-        {
-            // Alert if an unreognised address is checking in
-            return "Check-in by unrecognised address "; //+ msg.sender + " at location " + _beacon_address;
         }
     }
 
