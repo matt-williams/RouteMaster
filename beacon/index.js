@@ -1,6 +1,9 @@
+var ethereumRpcUrl = process.env.ETHEREUM_RPC_URL || 'http://localhost:8545';
+console.log("Connecting to Ethereum at", ethereumRpcUrl);
+
 var Web3 = require('web3');
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+web3.setProvider(new web3.providers.HttpProvider(ethereumRpcUrl));
 var MyContract = web3.eth.contract(require('./abi.json'));
 
 var tokens = [];
@@ -19,7 +22,7 @@ function refreshToken() {
       tokens.splice(0, Math.max(tokens.length - 2, 0));
       tokens.push(token);
       console.log("Tokens now", tokens);
-      var cmd = "hcitool -i hci0 cmd 0x08 0x0008 0c 0b ff 52 4d " + localIp.replace(/../g, function(x) {return x + " "}) + token.replace(/../g, function(x) {return x + " "});
+      var cmd = "hcitool -i hci0 cmd 0x08 0x0008 1a 0b ff 52 4d " + localIp.replace(/../g, function(x) {return x + " "}) + token.replace(/../g, function(x) {return x + " "});
       child_process.exec(cmd, function(err, stdout, stderr) {
         if (err) {
           console.log("Updating Bluetooth failed");
