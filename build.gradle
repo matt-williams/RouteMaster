@@ -1,4 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext.compileSdkVersion = 25
+ext.buildToolsVersion = "25.0.2"
+ext.minSdkVersion = 21
+ext.targetSdkVersion = 25
 
 buildscript {
     repositories {
@@ -15,6 +19,17 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://repo.commonsware.com.s3.amazonaws.com"
+        }
+
+        maven {
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+
+        maven {
+            url "https://dl.bintray.com/alt236/maven"
+        }
     }
 }
 

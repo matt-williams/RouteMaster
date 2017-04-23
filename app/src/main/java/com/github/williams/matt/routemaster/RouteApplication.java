@@ -1,5 +1,6 @@
 package com.github.williams.matt.routemaster;
 
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
@@ -11,12 +12,14 @@ import com.mobile.push.PushManager;
  */
 public class RouteApplication extends MultiDexApplication {
     private static final String LOG_TAG = RouteApplication.class.getSimpleName();
+    public static SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
         Log.d(LOG_TAG, "RouteApplication.onCreate - Initializing application...");
         super.onCreate();
         initializeApplication();
+        sharedPreferences = getSharedPreferences("Route", MODE_PRIVATE);
         Log.d(LOG_TAG, "RouteApplication.onCreate - RouteApplication initialized OK");
     }
 

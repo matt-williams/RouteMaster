@@ -18,4 +18,7 @@
     <dimen name="sign_in_text_margin">20dp</dimen>
     <dimen name="sign_in_separator_height">2dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+
+    <dimen name="space_between_sections">8dp</dimen>
 </resources>

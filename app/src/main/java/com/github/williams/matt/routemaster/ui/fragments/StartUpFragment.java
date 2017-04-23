@@ -2,8 +2,6 @@ package com.github.williams.matt.routemaster.ui.fragments;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +27,7 @@ import com.mobile.push.SnsTopic;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StartUpFragment extends Fragment {
 
@@ -40,6 +39,9 @@ public class StartUpFragment extends Fragment {
 
     @BindView(R.id.btnMaketransaction)
     Button btnTransactions;
+
+    @BindView(R.id.btnViewLocations)
+    Button viewLocations;
 
     private ArrayAdapter<SnsTopic> topicsAdapter;
     private static final int REQUEST_ENABLE_BT = 22;
@@ -57,26 +59,10 @@ public class StartUpFragment extends Fragment {
         return fragment;
     }
 
-    private BluetoothAdapter mBluetoothAdapter;
-
-    // Create a BroadcastReceiver for ACTION_FOUND.
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-            }
-        }
-    };
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -84,30 +70,12 @@ public class StartUpFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter != null) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
-        }
+    }
 
-        IntentFilter filter = new IntentFilter(BluetoothDevice.EXTRA_DEVICE);
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-
-        getActivity().registerReceiver(mReceiver, filter);
-
-        mBluetoothAdapter.startDiscovery();
-        if (mBluetoothAdapter.isDiscovering()) {
-            Toast.makeText(getActivity(), "Discovering", Toast.LENGTH_SHORT).show();
-        } else {
-            int scanMode = mBluetoothAdapter.getScanMode();
-            if (scanMode == BluetoothAdapter.SCAN_MODE_NONE)
-            {
-
-            }
-
-        }
+    @OnClick(R.id.btnViewLocations)
+    public void openList()
+    {
+        mListener.onViewLocations();
     }
 
     @Override

@@ -13,12 +13,12 @@ public class ApiClient {
     private final  Retrofit retrofit;
     private RouteMasterService routeMasterService;
 
-    public ApiClient() {
+    public ApiClient(String ipaddress) {
 
         retrofit = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("")
+                .baseUrl(ipaddress)
                 .build();
     }
 
