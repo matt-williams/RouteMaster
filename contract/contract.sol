@@ -120,4 +120,19 @@ contract RouteMaster
         }
         return rule;
     }
+    
+    function getBeacon(uint _index) constant returns (address, address, uint)
+    {
+        Beacon beacon = beacons[_index];
+        CheckIn checkIn = beacon.check_in;
+        return (beacon.beacon_address, checkIn.phone_address, checkIn.timestamp);
+    }
+    
+    function getCheckedIn(uint _index) constant returns (address, uint)
+    {
+        Beacon beacon = beacons[_index];
+        CheckIn checkIn = beacon.check_in;
+        return (checkIn.phone_address, checkIn.timestamp);
+    }
+    
 }
