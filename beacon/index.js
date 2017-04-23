@@ -96,7 +96,7 @@ app.post('/contracts/:contract', function(req, res) {
   var token = req.query.token; // TODO Check this
   senseColor = [0, 0, 255];
   if (contract && account) {
-    console.log("Account " + account + "checking in for " + contract);
+    console.log("Account " + account + " checking in for " + contract);
     db.get("SELECT account FROM contracts where contract = ?", contract, function(err, row) {
       if (err) {
         console.log("Failed to SELECT", err);
