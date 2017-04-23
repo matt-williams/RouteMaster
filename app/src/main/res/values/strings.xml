@@ -1,3 +1,67 @@
 <resources>
     <string name="app_name">RouteMaster</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="google_cloud_messaging_package">com.github.williams.matt.routemaster</string>
+    <string name="hello_blank_fragment">temp</string>
+    <string name="push_demo_title">Routemaster</string>
+
+    <string name="sign_in_succeeded_message_format">"Sign-in with %s succeeded."</string>
+    <string name="sign_in_canceled_message_format">"Sign-in with %s canceled."</string>
+    <string name="sign_in_failure_dialog_title">Sign-In Error</string>
+    <string name="sign_in_failure_message_format">Sign-in with %1$s failed.\n%2$s</string>
+
+    <string name="sign_in_email">Email</string>
+    <string name="sign_in_username">Username/Phone Number (+15551234567)</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in_new_account">Create New Account</string>
+    <string name="sign_in_forgot_password">Forgot Your Password?</string>
+    <string name="sign_in_or">or sign in with</string>
+    <string name="title_activity_sign_up">Sign Up</string>
+    <string name="title_activity_forgot_password">Forgot Password</string>
+    <string name="title_activity_mfa">MFA Code</string>
+    <string name="title_activity_sign_up_confirm">Confirm Account</string>
+    <string name="title_dialog_sign_up_failed">Sign Up Failed</string>
+    <string name="forgot_password_header">Forgot your password?</string>
+    <string name="forgot_password_body">Set your new password with the verification code that was sent to you.</string>
+    <string name="forgot_password_input_code_hint">Verification code</string>
+    <string name="forgot_password_button_hint">Set password</string>
+    <string name="mfa_header">MFA verification is required to authenticate.</string>
+    <string name="mfa_code_sent_message">Code sent.</string>
+    <string name="verify_button_text">Verify</string>
+    <string name="username_text">Username</string>
+    <string name="given_name_text">Given name</string>
+    <string name="email_address_text">Email address</string>
+    <string name="phone_number_text">Phone number (+15551234567)</string>
+    <string name="sign_up_header">Enter the following information to sign up.</string>
+    <string name="sign_up_confirm_code">Confirmation code</string>
+    <string name="sign_up_confirm_text">Confirm</string>
+    <string name="sign_up_confirm_code_sent">A confirmation code was sent.</string>
+    <string name="sign_up_confirm_enter_code">Please enter the code below to confirm your account.</string>
+    <string name="sign_up_confirm_title">Confirm your account</string>
+    <string name="password_change_success">Password change succeeded.</string>
+    <string name="password_change_failed">Password change failed.</string>
+    <string name="sign_up_success">Sign up succeeded.</string>
+    <string name="sign_up_failed">Sign up failed.</string>
+    <string name="login_success">Login succeeded.</string>
+    <string name="login_failed">Login failed.</string>
+    <string name="sign_up_confirm_success">Sign up confirmation succeeded.</string>
+    <string name="sign_up_confirm_failed">Sign up confirmation failed.</string>
+    <string name="title_activity_sign_in">Sign In</string>
+    <string name="title_activity_start_up">StartUpActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="access">ATTENTION ! SOMEONE IS TRYING TO ACCESS YOUR CONTRACT. USE THE BUTTONS BELOW TO RESPOND</string>
+
+    <string name="main_fragment_title_push_notification">Push Notifications</string>
+    <string name="main_fragment_subtitle_push_notification">Engage users with push notifications</string>
+    <string name="push_enable_choice_text">Receive Push Notifications</string>
+    <string name="push_demo_progress_dialog_title">Please wait &#8230;</string>
+    <string name="push_demo_wait_message_register">Registering device for push notification.</string>
+    <string name="push_demo_wait_message_update_notification">Updating push notification status.</string>
+    <string name="push_demo_wait_message_update_subscription">Updating subscription status.</string>
+    <string name="push_demo_error_message_register">Failed to register device due to \'%s\'.</string>
+    <string name="push_demo_error_message_update_notification">Failed to update notification status due to \'%s\'.</string>
+    <string name="push_demo_error_message_update_subscription">Failed to update subscription due to \'%s\'.</string>
+    <string name="push_demo_error_message_google_play_services_unavailable">Push Notifications are disabled because Google Play Services are unavailable on the device.</string>
+    <string name="push_demo_confirm_message_unsubscribe">Do you want to unsubscribe from \'%s\'.</string>
+
 </resources>

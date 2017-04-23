@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
+
+        <Button
+            android:id="@+id/btnMaketransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/linearLayout"
+            android:layout_alignParentEnd="true"
+            android:text="Make Transaction" />
+
+        <Button
+            android:id="@+id/btnSuspendRoute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suspend Route" />
+
+        <Button
+            android:id="@+id/btnAddContract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:text="Add contract ID" />
+
+        <Button
+            android:id="@+id/btnViewLocations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View/Remove Locations" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:text="Notifications Enabled"
+        android:visibility="visible" />
+
+</RelativeLayout>
