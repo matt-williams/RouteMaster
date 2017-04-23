@@ -1,29 +1,53 @@
 package com.github.williams.matt.routemaster.ui;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amazonaws.mobilehelper.auth.IdentityManager;
 import com.github.williams.matt.routemaster.PushListenerService;
 import com.github.williams.matt.routemaster.R;
 import com.github.williams.matt.routemaster.SplashActivity;
+import com.github.williams.matt.routemaster.containers.BluetoothLeDeviceStore;
+import com.github.williams.matt.routemaster.ui.common.recyclerview.RecyclerViewBinderCore;
+import com.github.williams.matt.routemaster.ui.common.recyclerview.RecyclerViewItem;
+import com.github.williams.matt.routemaster.ui.fragments.AddViewContractsFragment;
 import com.github.williams.matt.routemaster.ui.fragments.StartUpFragment;
+import com.github.williams.matt.routemaster.ui.recyclerview.model.IBeaconItem;
+import com.github.williams.matt.routemaster.ui.recyclerview.model.LeDeviceItem;
+import com.github.williams.matt.routemaster.util.BluetoothLeScanner;
+import com.github.williams.matt.routemaster.util.BluetoothUtils;
 import com.mobile.AWSMobileClient;
 
-public class StartUpActivity extends AppCompatActivity implements StartUpFragment.StartUpListener {
+import java.util.ArrayList;
+import java.util.List;
 
+import uk.co.alt236.bluetoothlelib.device.BluetoothLeDevice;
+import uk.co.alt236.bluetoothlelib.device.beacon.BeaconType;
+import uk.co.alt236.bluetoothlelib.device.beacon.BeaconUtils;
+import uk.co.alt236.bluetoothlelib.device.beacon.ibeacon.IBeaconDevice;
 
+;
+
+public class StartUpActivity extends AppCompatActivity implements StartUpFragment.StartUpListener, AddViewContractsFragment.ViewContractListener {
     private static final String LOG_TAG = StartUpActivity.class.getSimpleName();
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 99;
+
 
     /**
      * The identity manager used to keep track of the current user account.
@@ -37,6 +61,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
         setContentView(R.layout.activity_start_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mDeviceStore = new BluetoothLeDeviceStore();
 
         // Obtain a reference to the mobile client. It is created in the Application class,
         // but in case a custom Application class is not used, we initialize it here if necessary.
@@ -47,21 +72,127 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
 
         // Obtain a reference to the identity manager.
         identityManager = awsMobileClient.getIdentityManager();
-
+        mBluetoothUtils = new BluetoothUtils(this);
+        mScanner = new BluetoothLeScanner(mLeScanCallback, mBluetoothUtils);
 
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, StartUpFragment.newInstance())
                 .commit();
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                startScan();
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            startScan();
+        }
+    }
+    private RecyclerViewBinderCore mCore;
+    private BluetoothUtils mBluetoothUtils;
+    private BluetoothLeScanner mScanner;
+    private BluetoothLeDeviceStore mDeviceStore;
+
+    public static List<RecyclerViewItem> itemList = new ArrayList<>();
+    public static List<IBeaconItem> beaconItemList = new ArrayList<>();
+    public static List<LeDeviceItem> devices = new ArrayList<>();
+    private final BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
+        @Override
+        public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+            final BluetoothLeDevice deviceLe = new BluetoothLeDevice(device, rssi, scanRecord, System.currentTimeMillis());
+            mDeviceStore.addDevice(deviceLe);
+
+            for (final BluetoothLeDevice leDevice : mDeviceStore.getDeviceList()) {
+                if (BeaconUtils.getBeaconType(leDevice) == BeaconType.IBEACON) {
+                    IBeaconItem iBeaconItem = new IBeaconItem(new IBeaconDevice(leDevice));
+                    beaconItemList.add(iBeaconItem);
+                    itemList.add(iBeaconItem);
+                } else {
+                    devices.add(new LeDeviceItem(leDevice));
+                    itemList.add(new LeDeviceItem(leDevice));
+                }
+            }
+
+        }
+    };
+
+    //0x184fc661f5ad3ccd17fb0b9a3b0861057aff712b
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mScanner.scanLeDevice(-1, false);
+
+        // unregister notification receiver
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
+
     }
 
+
+    private void startScan() {
+        final boolean isBluetoothOn = mBluetoothUtils.isBluetoothOn();
+        final boolean isBluetoothLePresent = mBluetoothUtils.isBluetoothLeSupported();
+
+        mBluetoothUtils.askUserToEnableBluetoothIfNeeded();
+        if (isBluetoothOn && isBluetoothLePresent) {
+            mScanner.scanLeDevice(-1, true);
+            invalidateOptionsMenu();
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    startScan();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override
@@ -99,17 +230,14 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
         }
     };
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // unregister notification receiver
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
-    }
 
     @Override
     public void onViewLocations() {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("main")
+                .replace(R.id.container, AddViewContractsFragment.newInstance())
+                .commit();
     }
 
     @Override
@@ -124,6 +252,11 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
 
     @Override
     public void onMakeTransaction() {
+
+    }
+
+    @Override
+    public void onAdd(Uri uri) {
 
     }
 }

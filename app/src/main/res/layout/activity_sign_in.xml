@@ -9,17 +9,18 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerVertical="true"
         android:gravity="center"
-        >
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
         <EditText
             android:id="@+id/signIn_editText_email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/sign_in_text_margin"
             android:layout_marginRight="@dimen/sign_in_text_margin"
-            android:inputType="textEmailAddress"
-            android:hint="@string/sign_in_email"
+            android:inputType="phone"
+            android:text="+447500006593"
+            android:hint="Phone Number"
             />
         <EditText
             android:id="@+id/signIn_editText_password"
@@ -28,6 +29,7 @@
             android:layout_marginLeft="@dimen/sign_in_text_margin"
             android:layout_marginRight="@dimen/sign_in_text_margin"
             android:inputType="textPassword"
+            android:text="Aaaaaaa1*"
             android:hint="@string/sign_in_password"
             />
 
