@@ -1,6 +1,6 @@
 var Web3 = require('web3');
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+web3.setProvider(new web3.providers.HttpProvider(process.env.ETHEREUM_RPC_URL || 'http://localhost:8545'));
 var MyContract = web3.eth.contract(require('./abi.json'));
 
 var tokens = [];
