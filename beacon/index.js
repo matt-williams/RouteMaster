@@ -104,7 +104,7 @@ app.post('/contracts/:contract', function(req, res) {
         res.sendStatus(503);
       } else if (row) {
         var myContract = MyContract.at(contract);
-        myContract.checkIn.sendTransaction(account, {from: row.account}, function(err) {
+        myContract.checkIn.sendTransaction(account, {from: row.account, gas: 1000000}, function(err) {
           if (err) {
             console.log("Failed to call contract", err);
             senseColor = [255, 0, 0];
