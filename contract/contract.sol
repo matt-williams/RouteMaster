@@ -110,12 +110,12 @@ contract RouteMaster
         }
     }
 
-    function getNumberOfBeacons() returns (uint)
+    function getNumberOfBeacons() constant returns (uint)
     {
         return beacons.length;
     }
 
-    function getRule() returns (uint)
+    function getRule() constant returns (uint)
     {
         return rule;
     }
