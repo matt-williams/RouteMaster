@@ -4,7 +4,7 @@ console.log("Connecting to Ethereum at", ethereumRpcUrl);
 var Web3 = require('web3');
 var web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider(ethereumRpcUrl));
-var MyContract = web3.eth.contract(require('./abi.json'));
+var MyContract = web3.eth.contract(require('../contract/ABI.json'));
 
 var tokens = [];
 var crypto = require('crypto');
@@ -36,6 +36,16 @@ function refreshToken() {
   });
 }
 refreshToken();
+
+var senseColor = [255, 255, 255];
+var sense = require("sense-hat-led");
+sense.clear();
+setInterval(function() {
+  sense.clear(senseColor);
+  senseColor[0] = Math.max(senseColor[0] - 32, 0);
+  senseColor[1] = Math.max(senseColor[1] - 32, 0);
+  senseColor[2] = Math.max(senseColor[2] - 32, 0);
+}, 100);
 
 var express = require('express');
 var app = express()
@@ -82,23 +92,24 @@ app.post('/contracts/:contract', function(req, res) {
   var account = req.query.account;
   var token = req.query.token; // TODO Check this
   if (contract && account) {
+    console.log("Account " + account + "checking in for " + contract);
     db.get("SELECT account FROM contracts where contract = ?", contract, function(err, row) {
       if (err) {
         console.log("Failed to SELECT", err);
         res.sendStatus(503);
       } else if (row) {
         var myContract = MyContract.at(contract);
-        //myContract.doAction.sendTransaction({from: row.account}, function(err) {
-        //  if (err) {
-        //    console.log("Failed to call contract", err);
-        //    res.sendStatus(503);
-        //  } else {
+        myContract.doAction.sendTransaction(account, {from: row.account}, function(err) {
+          if (err) {
+            console.log("Failed to call contract", err);
+            res.sendStatus(503);
+          } else {
             res.json({});
-        //  }
-        //});
+          }
+        });
       } else {
         console.log("No row");
-        res.sendStatus(404); // TODO Fix this backwardness - GET creates the contract, and POST reads it!
+        res.sendStatus(404); // TODO Fix this backwardness - GET creates the contract (and account), and POST updates it!
       }
     });
   } else {
