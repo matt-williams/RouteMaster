@@ -1,5 +1,7 @@
 var ethereumRpcUrl = process.env.ETHEREUM_RPC_URL || 'http://localhost:8545';
+var ethereumAccount = process.env.ETHEREUM_ACCOUNT;
 console.log("Connecting to Ethereum at", ethereumRpcUrl);
+console.log("Ethereum account is", ethereumAccount);
 
 var Web3 = require('web3');
 var web3 = new Web3();
@@ -61,12 +63,13 @@ app.get('/contracts/:contract', function(req, res) {
         res.json({account: row.account});
       } else {
         // TODO: Create new account for this contract
-        web3.eth.getAccounts(function(err, accounts) {
-          if (err) {
-            console.log("Failed to get accounts", err);
-	    res.sendStatus(503);
-          } else if (accounts.length > 0) {
-            var account = accounts[0];
+//        web3.eth.getAccounts(function(err, accounts) {
+//          if (err) {
+//            console.log("Failed to get accounts", err);
+//	      res.sendStatus(503);
+//          } else if (accounts.length > 0) {
+//            var account = accounts[0];
+            var account = ethereumAccount;
             db.run("INSERT INTO contracts (contract, account) VALUES (?, ?);", contract, account, function(err) {
               if (err) {
                 console.log("Failed to INSERT", err);
@@ -75,11 +78,11 @@ app.get('/contracts/:contract', function(req, res) {
                 res.json({account: account});
               }
             });
-          } else {
-            console.log("No accounts");
-	    res.sendStatus(503);
-          }
-        });
+//          } else {
+//            console.log("No accounts");
+//            res.sendStatus(503);
+//          }
+//        });
       }
     });
   } else {
@@ -91,28 +94,34 @@ app.post('/contracts/:contract', function(req, res) {
   var contract = req.params.contract;
   var account = req.query.account;
   var token = req.query.token; // TODO Check this
+  senseColor = [0, 0, 255];
   if (contract && account) {
     console.log("Account " + account + "checking in for " + contract);
     db.get("SELECT account FROM contracts where contract = ?", contract, function(err, row) {
       if (err) {
         console.log("Failed to SELECT", err);
+        senseColor = [255, 0, 0];
         res.sendStatus(503);
       } else if (row) {
         var myContract = MyContract.at(contract);
-        myContract.doAction.sendTransaction(account, {from: row.account}, function(err) {
+        myContract.checkIn.sendTransaction(account, {from: row.account}, function(err) {
           if (err) {
             console.log("Failed to call contract", err);
+            senseColor = [255, 0, 0];
             res.sendStatus(503);
           } else {
+            senseColor = [0, 255, 0];
             res.json({});
           }
         });
       } else {
         console.log("No row");
+        senseColor = [255, 0, 0];
         res.sendStatus(404); // TODO Fix this backwardness - GET creates the contract (and account), and POST updates it!
       }
     });
   } else {
+    senseColor = [255, 0, 0];
     res.sendStatus(400);
   }
 });
