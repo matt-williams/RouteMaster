@@ -1,6 +1,9 @@
+var ethereumRpcUrl = process.env.ETHEREUM_RPC_URL || 'http://localhost:8545';
+console.log("Connecting to Ethereum at", ethereumRpcUrl);
+
 var Web3 = require('web3');
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider(process.env.ETHEREUM_RPC_URL || 'http://localhost:8545'));
+web3.setProvider(new web3.providers.HttpProvider(ethereumRpcUrl));
 var MyContract = web3.eth.contract(require('./abi.json'));
 
 var tokens = [];
