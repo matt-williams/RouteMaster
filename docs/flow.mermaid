@@ -1,0 +1,61 @@
+sequenceDiagram
+participant Old Phone
+participant New Phone
+participant Ethereum
+participant Beacon 1
+participant Beacon 2
+Note over Old Phone: Create account
+Old Phone->>Ethereum: Create contract for account
+Ethereum-->>Old Phone:Contract id
+Old Phone->>Ethereum: Send Ether into contract
+Ethereum-->>Old Phone: Sent
+Beacon 1->>Old Phone: Bluetooth Low Energy broadcast, including HTTP URL
+Old Phone->>Beacon 1: GET /contracts/<contract id>
+Note over Beacon 1: Create account
+Beacon 1-->>Old Phone: {"account": "0x0123...cdef"}
+Old Phone->>Ethereum: Send Ether to Beacon 1's account 
+Ethereum-->>Old Phone: Sent
+Old Phone->>Ethereum: Update contract for Beacon 1
+Ethereum-->>Old Phone: Updated contract
+Beacon 2->>Old Phone: Bluetooth Low Energy broadcast, including HTTP URL
+Old Phone->>Beacon 2: GET /contracts/<contract id>
+Note over Beacon 2: Create account
+Beacon 2-->>Old Phone: {"account": "0x4567...89abc"}
+Old Phone->>Ethereum: Send Ether to Beacon 2's account 
+Ethereum-->>Old Phone: Sent
+Old Phone->>Ethereum: Update contract for Beacon 2
+Ethereum-->>Old Phone: Updated contract
+loop Check in every day and withdraw
+    Beacon 1->>Old Phone: Bluetooth Low Energy broadcast, including HTTP URL
+    Old Phone->>Beacon 1: POST /contracts/<contract id>?account=<account id>
+    Beacon 1->>Ethereum: Call contract's login method with specified account
+    Ethereum-->>Beacon 1: OK
+    Beacon 1-->>Old Phone: {}
+    Beacon 2->>Old Phone: Bluetooth Low Energy broadcast, including HTTP URL
+    Old Phone->>Beacon 2: POST /contracts/<contract id>?account=<account id>
+    Beacon 2->>Ethereum: Call contract's login method with specified account
+    Ethereum-->>Beacon 2: OK
+    Beacon 2-->>Old Phone: {}
+    Old Phone->>Ethereum: Withdraw some Ether from contract
+    Ethereum-->>Old Phone: Withdrawn
+end
+Note over Old Phone: Lose phone
+Note over New Phone: Create account
+opt Try withdrawing  
+    New Phone->>Ethereum: Withdraw some Ether from contract
+    Ethereum-->>New Phone: Denied - not owner of contract
+end
+Beacon 1->>New Phone: Bluetooth Low Energy broadcast, including HTTP URL
+New Phone->>Beacon 1: POST /contracts/<contract id>?account=<account id>
+Beacon 1->>Ethereum: Call contract's login method with specified account
+Ethereum-->>Beacon 1: OK
+Beacon 1-->>New Phone: {}
+Beacon 2->>New Phone: Bluetooth Low Energy broadcast, including HTTP URL
+New Phone->>Beacon 2: POST /contracts/<contract id>?account=<account id>
+Beacon 2->>Ethereum: Call contract's login method with specified account
+Ethereum-->>Beacon 2: OK
+Beacon 2-->>New Phone: {}
+New Phone->>Ethereum: Call contract's take over method
+Ethereum-->>New Phone: OK
+New Phone->>Ethereum: Withdraw some Ether from contract
+Ethereum-->>New Phone: OK
