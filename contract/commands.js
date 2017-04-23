@@ -3,7 +3,6 @@ var abi = [{"constant":false,"inputs":[{"name":"_new_rule","type":"uint256"}],"n
 var route = eth.contract(abi).at('0x1e97e737b5a149118c20727d398c9705f0a7af1a');
 var beacon = eth.contract(abi).at('0x1e97e737b5a149118c20727d398c9705f0a7af1a');
 
-personal.unlockAccount(address, password, 10000000);
 route.setRule.sendTransaction(1, {from: '0x320b320B322fdFc76894160C2F48448D7C940dDE'});
 route.getRule();
 
@@ -11,9 +10,11 @@ var beacon1 = '0xfc778ea23be4ce5fb12044c093e7c4bf491259b2';
 var beacon2 = '0xb1d0cfbd7eabeed07aae524cc2dfae8c64b1f7c7';
 
 route.getNumberOfBeacons();
-route.addNewBeacon.sendTransaction(beacon1, {from: '0x320b320B322fdFc76894160C2F48448D7C940dDE', gas:1000000});
+route.addNewBeacon.sendTransaction(beacon2, {from: '0x320b320B322fdFc76894160C2F48448D7C940dDE', gas:1000000});
 route.replaceBeacon.sendTransaction(beacon1, beacon2, {from: '0x320b320B322fdFc76894160C2F48448D7C940dDE'});
 route.deleteBeacon.sendTransaction(beacon2, {from: '0x320b320B322fdFc76894160C2F48448D7C940dDE'});
+route.getBeacon(0);
+route.getCheckedIn(0);
 
 var phone = '0x0xccdc5985455efa0ee51a9cdb9b8a48d7a2e00998';
 beacon.checkIn.sendTransaction(phone, {from: '0x320b320B322fdFc76894160C2F48448D7C940dDE'});
