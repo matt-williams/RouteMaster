@@ -36,10 +36,14 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.3.9'
     compile 'com.amazonaws:aws-android-sdk-cognito:2.3.9'
     compile 'com.amazonaws:aws-android-sdk-sns:2.3.9'
+
+
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     testCompile 'junit:junit:4.12'

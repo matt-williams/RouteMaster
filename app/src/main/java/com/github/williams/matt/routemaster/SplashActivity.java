@@ -24,7 +24,7 @@ import com.amazonaws.mobilehelper.auth.signin.AuthException;
 import com.github.williams.matt.routemaster.ui.StartUpActivity;
 import com.mobile.AWSMobileClient;
 
-/**
+/**\
  * Splash Activity is the start-up activity that appears until a delay is expired
  * or the user taps the screen.  When the splash activity starts, various app
  * initialization operations are performed.

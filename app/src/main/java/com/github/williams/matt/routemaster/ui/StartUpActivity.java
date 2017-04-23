@@ -1,5 +1,7 @@
 package com.github.williams.matt.routemaster.ui;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +25,9 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
 
     private static final String LOG_TAG = StartUpActivity.class.getSimpleName();
 
-    /** The identity manager used to keep track of the current user account. */
+    /**
+     * The identity manager used to keep track of the current user account.
+     */
     private IdentityManager identityManager;
 
 
@@ -44,6 +48,8 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
         // Obtain a reference to the identity manager.
         identityManager = awsMobileClient.getIdentityManager();
 
+
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, StartUpFragment.newInstance())
@@ -51,6 +57,12 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
 
     @Override
     protected void onResume() {
