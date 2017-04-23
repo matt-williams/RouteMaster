@@ -19,7 +19,7 @@ function refreshToken() {
       tokens.splice(0, Math.max(tokens.length - 2, 0));
       tokens.push(token);
       console.log("Tokens now", tokens);
-      var cmd = "hcitool -i hci0 cmd 0x08 0x0008 0c 0b ff 52 4d " + localIp.replace(/../g, function(x) {return x + " "}) + token.replace(/../g, function(x) {return x + " "});
+      var cmd = "hcitool -i hci0 cmd 0x08 0x0008 1a 0b ff 52 4d " + localIp.replace(/../g, function(x) {return x + " "}) + token.replace(/../g, function(x) {return x + " "});
       child_process.exec(cmd, function(err, stdout, stderr) {
         if (err) {
           console.log("Updating Bluetooth failed");
