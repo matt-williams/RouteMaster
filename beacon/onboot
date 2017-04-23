@@ -4,3 +4,7 @@ hciconfig hci0 name RouteMaster
 hciconfig hci0 down
 hciconfig hci0 up
 hciconfig hci0 leadv
+
+. /etc/default/route-master
+cd /home/pi/RouteMaster/beacon
+nodejs index.js
