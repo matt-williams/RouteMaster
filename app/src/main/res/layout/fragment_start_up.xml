@@ -33,13 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="Add contract ID" />
+            android:text="Left Beacon" />
 
         <Button
             android:id="@+id/btnViewLocations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="View/Remove Locations" />
+            android:text="Front Beacon" />
     </LinearLayout>
 
     <CheckBox

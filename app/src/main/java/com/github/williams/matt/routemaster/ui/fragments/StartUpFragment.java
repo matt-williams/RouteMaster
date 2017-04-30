@@ -78,6 +78,13 @@ public class StartUpFragment extends Fragment {
         mListener.onViewLocations();
     }
 
+    @OnClick(R.id.btnAddContract)
+    public void addContract()
+    {
+        mListener.onAddContract();
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

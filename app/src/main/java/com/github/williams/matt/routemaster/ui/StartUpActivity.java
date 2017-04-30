@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +25,7 @@ import com.github.williams.matt.routemaster.PushListenerService;
 import com.github.williams.matt.routemaster.R;
 import com.github.williams.matt.routemaster.SplashActivity;
 import com.github.williams.matt.routemaster.containers.BluetoothLeDeviceStore;
+import com.github.williams.matt.routemaster.network.ApiClient;
 import com.github.williams.matt.routemaster.ui.common.recyclerview.RecyclerViewBinderCore;
 import com.github.williams.matt.routemaster.ui.common.recyclerview.RecyclerViewItem;
 import com.github.williams.matt.routemaster.ui.fragments.AddViewContractsFragment;
@@ -37,6 +39,8 @@ import com.mobile.AWSMobileClient;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import uk.co.alt236.bluetoothlelib.device.BluetoothLeDevice;
 import uk.co.alt236.bluetoothlelib.device.beacon.BeaconType;
 import uk.co.alt236.bluetoothlelib.device.beacon.BeaconUtils;
@@ -242,6 +246,33 @@ public class StartUpActivity extends AppCompatActivity implements StartUpFragmen
 
     @Override
     public void onAddContract() {
+
+                // convert iP address
+//http://10.1.104.78:8080/contracts/0x184fc661f5ad3ccdfb0b9a3b0861057aff712b?account=0x040ddcdbc365dc36b35e385ad6fd89b5f537cd3c
+//
+                new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] params) {
+                        new ApiClient("http://10.1.106.128:8080").userCall("0xbb297ff77c642fd73a8b21010d58eb8d6f12b51f", "0x040ddcdbc365dc36b35e385ad6fd89b5f537cd3c")
+                                .observeOn(Schedulers.newThread())
+                                .doOnError(new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+                                        throwable.printStackTrace();
+                                    }
+                                })
+                                .doOnNext(new Action1() {
+                                    @Override
+                                    public void call(Object o) {
+                                        // Parse the Object o
+
+
+                                        // App would send update to Ethereum
+                                    }
+                                }).subscribe();
+                        return null;
+                    }
+                }.execute();
 
     }
 

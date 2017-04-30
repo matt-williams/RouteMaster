@@ -20,11 +20,17 @@ public class ApiClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(ipaddress)
                 .build();
+        routeMasterService = retrofit.create(RouteMasterService.class);
     }
 
     public Observable getAccount(String contractId)
     {
         return routeMasterService.getAccount(contractId);
+    }
+
+    public Observable userCall(String accountID, String contractID)
+    {
+        return routeMasterService.updateUser(accountID, contractID);
     }
 
 }
